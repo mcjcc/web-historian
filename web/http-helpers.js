@@ -11,6 +11,15 @@ exports.headers = {
 };
 
 exports.serveAssets = function(res, asset, callback) {
+
+  // read in a response object, and asset, and callback
+
+  // we open the asset with fs and output it to a variable
+  // and then we store the variable inside the response object
+  // and then return the response object
+  var content = fs.readFile(asset);
+  res.data = content;
+  return res;
   // Write some code here that helps serve up your static files!
   // (Static files are things like html (yours or archived from others...),
   // css, or anything that doesn't change often.)
@@ -19,3 +28,18 @@ exports.serveAssets = function(res, asset, callback) {
 
 
 // As you progress, keep thinking about what helper functions you can put here!
+
+// create function for get request method
+
+// var actions = {
+//   'GET': function(req, res) {
+//     sendResponse(res, {results: });
+//   }
+// };
+
+
+// var sendResponse = function(res, data, statusCode) {
+//   statusCode = statusCode || 200;
+//   response.writeHead(statusCode, headers);
+//   response.end(JSON.stringify(data));
+// };
