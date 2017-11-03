@@ -87,9 +87,54 @@ exports.addUrlToList = function(url, callback) {
 // Done by second node server
 
 exports.isUrlArchived = function(url, callback) {
+  // go in to archives/sites folder 
+  fs.readdir(this.paths.archivedSites, (err, files) => {
+    // check if theres a file that matches the url input string  
+    var isArchived = false;
+    if (err) { throw err; }
+    files.forEach(function(file) {
+      if (file === url) {
+        isArchived = true;
+      }
+    });
+    callback(isArchived);  
+  });
+  
+  
+  // returns a boolean
 };
 
 exports.downloadUrls = function(urls) {
+  //  input is an array of urls
+  urls.forEach(function(url) {
+    exports.isUrlArchived(url, function(exists) {
+      if (!exists) {
+        fs.writeFile(exports.paths.archivedSites + '/' + url, exports.getSource(url/*, callback */), function(err) {
+          if (err) { throw err; }
+        });
+      }
+    });    
+  });
+  
+  //  output is a created file in the archives/sites folder
+};
+
+exports.getSource = function(url) {
+  var options = {
+    host: url,
+    port: 80,
+    path: '/index.html'
+  };
+  
+  http.get(options, function(res) {
+    console.log('Got response: ' + res);
+    var rawData = '';
+    res.on('data', (chunk) => { rawData += chunk; });
+    res.on('end', () => { var notRawData = rawData.toString(); });
+  }).on('error', function(e) {
+    console.log('Got error: ' + e.message);
+  });
+  // return stuff
 };
 
 // The user hits the submit button after typing a URL

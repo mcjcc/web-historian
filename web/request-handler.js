@@ -17,12 +17,32 @@ exports.handleRequest = function (req, res) {
     // what is read from fs.readFile gets stored into the html param of the callback function    
     fs.readFile(archive.paths.home, function(err, html) {
       if (err) { throw err; }    
-      res.writeHead(statusCode, httpHelpers.headers);
+      res.writeHead(statusCode, httpHelpers.headers);      
       res.write(html);
       res.end();           
     });    
-  }
+  } else if (req.method === 'POST') {
+    // for POST request: 
+    statusCode = 201;
+    // add it to site.txt if it's not there
+    
+    httpHelpers.collectData(req, function(url) {
+      if (archive.isUrlInList(url, callback)) {
+      }
+      // if url is in list,
+      //   if it's been archived
+              // we show the page from archives/sites/....  
+        // else show a loading type indicator
+     // else 
+          // add to list
+      
+    });
   
+  
+      
+      
+  
+  }
   
   // res.end(archive.paths.home);
   // console.log(typeof archive.paths.home);

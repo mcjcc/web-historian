@@ -27,19 +27,16 @@ exports.serveAssets = function(res, asset, callback) {
 
 
 
+
 // As you progress, keep thinking about what helper functions you can put here!
 
-// create function for get request method
+exports.collectData = function(req, callback) {
+  var data = '';
+  req.on('data', function(chunk) {
+    data += chunk;
+  });
 
-// var actions = {
-//   'GET': function(req, res) {
-//     sendResponse(res, {results: });
-//   }
-// };
-
-
-// var sendResponse = function(res, data, statusCode) {
-//   statusCode = statusCode || 200;
-//   response.writeHead(statusCode, headers);
-//   response.end(JSON.stringify(data));
-// };
+  req.on('end', function() {
+    callback(data.toString()); // data is a url like www.google.com
+  });
+};
